@@ -26,7 +26,7 @@ export default {
     name: 'SignUp',    
     methods:{
       SignIn(){
-        this.$router.push({name: 'HomePage'})
+        this.$router.push({name:'HomePage'})
       }
     }}
   
