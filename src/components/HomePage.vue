@@ -1,21 +1,26 @@
 <style>
-.viewLogs{
+.viewLogs {
     margin-left: 30%;
 
 }
-.buttonDiv{
+
+.buttonDiv {
     margin-top: 2%;
 }
-.hide{
-    display:none;
+
+.hide {
+    display: none;
 }
-.createUserTab{
+
+.createUserTab {
     width: 30% !important;
 }
-.logTable th{
+
+.logTable th {
     text-align: center;
 }
-.form-check{
+
+.form-check {
     width: 4px;
 }
 </style>
@@ -29,43 +34,38 @@
     <div>
         <div class="logTable hide container">
             <div>
-                <label>Log Type Filter</label>
+                <label style="margin-left: -1075px;">Log Type Filter</label>
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked>
-                    <label class="form-check-label" for="flexCheckChecked">
-                        All
-                    </label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="20" id="flexCheckDefault">
+                    <input class="form-check-input" type="checkbox" value="20" @change="checkFiltr" id="info">
                     <label class="form-check-label" for="flexCheckDefault">
                         Info
                     </label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="40" id="flexCheckDefault">
+                    <input class="form-check-input" type="checkbox" value="40" @change="checkFiltr" id="error">
                     <label class="form-check-label" for="flexCheckDefault">
-                        error
+                        Error
                     </label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="10" id="flexCheckDefault">
+                    <input class="form-check-input" type="checkbox" value="10" @change="checkFiltr" id="debug">
                     <label class="form-check-label" for="flexCheckDefault">
-                        debug
+                        Debug
                     </label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="50" id="flexCheckDefault">
+                    <input class="form-check-input" type="checkbox" value="50" @change="checkFiltr" id="critical">
                     <label class="form-check-label" for="flexCheckDefault">
-                        critical
+                        Critical
                     </label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="30" id="flexCheckDefault">
+                    <input class="form-check-input" type="checkbox" value="30" @change="checkFiltr" id="warning">
                     <label class="form-check-label" for="flexCheckDefault">
-                        warning
+                        Warning
                     </label>
                 </div>
+                <button type="button" class="btn btn-primary createUser" @click="filter">Apply filter</button>
             </div>
             <h2>Logs Table</h2>
             <table class="table table-bordered" id="datatable">
@@ -77,10 +77,10 @@
                         <th>Log Error Message</th>
                     </tr>
                     <tr v-for="item in products" :key="item.id">
-                        <td>{{item.id}}</td>
-                        <td>{{item.log_type}}</td>
-                        <td>{{item.log_time}}</td>
-                        <td>{{item.log_error_Message}}</td>
+                        <td>{{ item.id }}</td>
+                        <td>{{ item.log_type }}</td>
+                        <td>{{ item.log_time }}</td>
+                        <td>{{ item.log_error_Message }}</td>
                     </tr>
                 </tbody>
             </table>
@@ -99,7 +99,7 @@
     </div>
 </template>
 <script>
-import {createApp} from 'vue';
+import { createApp } from 'vue';
 import axios from 'axios';
 import VueAxios from 'vue-axios';
 import App from '../App.vue'
@@ -110,30 +110,52 @@ import "datatables.net-dt/css/jquery.dataTables.min.css";
 import $ from "jquery";
 
 const app = createApp(App)
-app.use(VueAxios,axios,$)
+app.use(VueAxios, axios, $)
 export default {
     name: 'HomePage',
-  mounted() {
-    axios.get("http://127.0.0.1:8000/logs/fetchLogs/").then((response) => {
-        console.log(response.data)
-      this.products = response.data;
-      $("#datatable").DataTable();
-    });
-  },
-  data: function () {
-    return {
-      products: [],
-    };
-  },
-  methods:{
-  show() {
-    $(".logTable").removeClass("hide")
-    $(".createUserTab").addClass("hide")
-  },
-  showUser(){
-    $(".createUserTab").removeClass("hide")
-    $(".logTable").addClass("hide")
-  }
-}
+    mounted() {
+
+    },
+    data: function () {
+        return {
+            products: [],
+        };
+    },
+    methods: {
+        show() {
+            $(".logTable").removeClass("hide")
+            $(".createUserTab").addClass("hide")
+            axios.get("http://127.0.0.1:8000/logs/fetchLogs/").then((response) => {
+                this.products = response.data;
+                $("#datatable").DataTable();
+            });
+        },
+        showUser() {
+            $(".createUserTab").removeClass("hide")
+            $(".logTable").addClass("hide")
+        },
+        filter() {
+            var filterReq = {}
+            $('.form-check-input').map(function (val, x) {
+                if (x.classList.contains("check")) {
+                    filterReq[x.id] = x.value
+
+                }
+            });
+            axios.post("http://127.0.0.1:8000/logs/filterLogs/", filterReq).then((response) => {
+                this.products = response.data;
+                $("#datatable").DataTable();
+            });
+        },
+        checkFiltr(x) {
+            if (x.target.classList.contains("check")) {
+                x.target.classList.remove("check")
+
+            }
+            else {
+                x.target.classList.add("check")
+            }
+        }
+    }
 }
 </script>

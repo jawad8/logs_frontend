@@ -1,13 +1,15 @@
 <style>
-.avatar{
+.avatar {
   width: 200px;
   margin-bottom: 10px;
 }
-.loginForm{
+
+.loginForm {
   border: 3px solid #f1f1f1
 }
-.loginCreds input{
-  width:300px;
+
+.loginCreds input {
+  width: 300px;
   height: 40px;
   padding-left: 20px;
   display: block;
@@ -16,49 +18,90 @@
   margin-left: auto;
   border: 1px solid skyblue;
 }
-.loginCreds button{
+
+.loginCreds button {
   width: 320px;
   height: 40px;
   border: 1px solid skyblue;
-  background:skyblue;
+  background: skyblue;
   color: #fff;
   cursor: pointer;
 }
+
 @import "https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css";
 @import"https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js";
-@import "https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"; 
+@import "https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js";
 </style>
+
 <template>
   <div>
     <h1>Logs Display Mechanism </h1>
     <form class="loginForm">
       <div class="imgcontainer">
-    <img src="../assets/login.svg" alt="Avatar" class="avatar">
-  </div>
+        <img src="../assets/login.svg" alt="Avatar" class="avatar">
+      </div>
       <div class="container loginCreds">
         <label for="uname"><b>Username</b></label>
-        <input type="text" placeholder="Enter Username" name="uname" required>
-        <br/>
+        <input type="text" placeholder="Enter Username" name="uname" class="username" required>
+        <br />
         <label for="psw"><b>Password</b></label>
-        <input type="password" placeholder="Enter Password" name="psw" required>
-        <br/>
+        <input type="password" placeholder="Enter Password" name="psw" class="password" required>
+        <br />
         <button type="button" @click="greet">Sign in</button>
       </div>
     </form>
   </div>
 </template>
 <script>
+import axios from 'axios'
+import $ from "jquery";
 
-export default {  
+
+export default {
   data() {
-  return {
-    name: 'Vue.js'
+    return {
+      name: 'Vue.js'
+    }
+  },
+  methods: {
+    greet() {
+      var username = $(".username").val()
+      var password = $(".password").val()
+      var authData = {
+        "Username": username,
+        "password": password,
+      }
+      axios.post("http://127.0.0.1:8000/users/authUser/", authData).then((response) => {
+        if (response.data) {
+          this.$router.push({ name: 'HomePage' })
+        }
+        else{
+          alert("Please check username and password")
+        }
+      }).catch(function (error) {
+    if (error.response) {
+      // The request was made and the server responded with a status code
+      // that falls out of the range of 2xx
+      console.log("adavcdcavd1")
+      console.log(error.response.data);
+      console.log(error.response.status);
+      console.log(error.response.headers);
+    } else if (error.request) {
+      console.log("2")
+
+      // The request was made but no response was received
+      // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+      // http.ClientRequest in node.js
+      console.log(error.request);
+    } else {
+      console.log("3")
+
+      // Something happened in setting up the request that triggered an Error
+      console.log('Error', error.message);
+    }
+    console.log(error.config);
+  });
+    }
   }
-},
-methods:{
-  greet() {
-    this.$router.push({name:'HomePage'})
-  }
-}
 }
 </script>
