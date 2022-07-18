@@ -1,29 +1,101 @@
+<style>
+.viewLogs{
+    margin-left: 30%;
+
+}
+.buttonDiv{
+    margin-top: 2%;
+}
+.hide{
+    display:none;
+}
+.createUserTab{
+    width: 30% !important;
+}
+.logTable th{
+    text-align: center;
+}
+.form-check{
+    width: 4px;
+}
+</style>
 <template>
-    <h1>Welcome to logs Display console</h1>
+    <h1 class="display-2">Welcome to logs Display console</h1>
+    <div class="buttonDiv">
+        <button type="button" class="btn btn-primary createUser" @click="showUser">Create User</button>
+        <button type="button" class="btn btn-primary viewLogs" @click="show">View Logs</button>
+        <hr />
+    </div>
     <div>
-        <button class="createUser">Create User</button>
-        <br/>
-        <br/>
-        <button class="viewLogs">View Logs</button>
-        <br/>
-        <br/>
-        <v-table>
-            <tr>
-                <th>Log Type</th>
-                <th>Log Message</th>
-                <th>Time</th>
-            </tr>
-            <tr>
-                <td>Warnng</td>
-                <td>this is a warning</td>
-                <td>11:30pm</td>
-            </tr>
-            <tr>
-                <td>Info</td>
-                <td>this is info</td>
-                <td>12:00pm</td>
-            </tr>
-        </v-table>
+        <div class="logTable hide container">
+            <div>
+                <label>Log Type Filter</label>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked>
+                    <label class="form-check-label" for="flexCheckChecked">
+                        All
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="20" id="flexCheckDefault">
+                    <label class="form-check-label" for="flexCheckDefault">
+                        Info
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="40" id="flexCheckDefault">
+                    <label class="form-check-label" for="flexCheckDefault">
+                        error
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="10" id="flexCheckDefault">
+                    <label class="form-check-label" for="flexCheckDefault">
+                        debug
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="50" id="flexCheckDefault">
+                    <label class="form-check-label" for="flexCheckDefault">
+                        critical
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="30" id="flexCheckDefault">
+                    <label class="form-check-label" for="flexCheckDefault">
+                        warning
+                    </label>
+                </div>
+            </div>
+            <h2>Logs Table</h2>
+            <table class="table table-bordered" id="datatable">
+                <tbody>
+                    <tr>
+                        <th>ID</th>
+                        <th>Log Type</th>
+                        <th>Log Time</th>
+                        <th>Log Error Message</th>
+                    </tr>
+                    <tr v-for="item in products" :key="item.id">
+                        <td>{{item.id}}</td>
+                        <td>{{item.log_type}}</td>
+                        <td>{{item.log_time}}</td>
+                        <td>{{item.log_error_Message}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="container createUserTab hide">
+            <div class="form-group">
+                <label for="Username">User Name</label>
+                <input type="text" class="form-control" id="Username" placeholder="User name">
+            </div>
+            <div class="form-group">
+                <label for="passwd">Password</label>
+                <input type="password" class="form-control" id="passwd" placeholder="Password">
+            </div>
+            <button type="button" class="btn btn-primary">Create User</button>
+        </div>
     </div>
 </template>
 <script>
@@ -31,14 +103,37 @@ import {createApp} from 'vue';
 import axios from 'axios';
 import VueAxios from 'vue-axios';
 import App from '../App.vue'
+import "jquery/dist/jquery.min.js";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "datatables.net-dt/js/dataTables.dataTables";
+import "datatables.net-dt/css/jquery.dataTables.min.css";
+import $ from "jquery";
+
 const app = createApp(App)
-app.use(VueAxios,axios)
+app.use(VueAxios,axios,$)
 export default {
     name: 'HomePage',
-    mounted(){
-        app.axios.get('http://127.0.0.1:8000/logs/fetchLogs/').then((res)=>{
-            console.warn(res)
-        })
-    }
+  mounted() {
+    axios.get("http://127.0.0.1:8000/logs/fetchLogs/").then((response) => {
+        console.log(response.data)
+      this.products = response.data;
+      $("#datatable").DataTable();
+    });
+  },
+  data: function () {
+    return {
+      products: [],
+    };
+  },
+  methods:{
+  show() {
+    $(".logTable").removeClass("hide")
+    $(".createUserTab").addClass("hide")
+  },
+  showUser(){
+    $(".createUserTab").removeClass("hide")
+    $(".logTable").addClass("hide")
+  }
+}
 }
 </script>
