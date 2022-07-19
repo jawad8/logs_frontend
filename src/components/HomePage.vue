@@ -23,6 +23,13 @@
 .form-check {
     width: 4px;
 }
+.logTable label{
+    font-weight: 500;
+}
+.filter_title{
+    font-weight: 700;
+    text-align: left;
+}
 </style>
 <template>
     <h1 class="display-2">Welcome to logs Display console</h1>
@@ -32,9 +39,10 @@
         <hr />
     </div>
     <div>
-        <div class="logTable hide container">
-            <div>
-                <label style="margin-left: -1075px;">Log Type Filter</label>
+        <div class="logTable hide container row">
+            <div class="col-3">
+                <p class="filter_title">Log Type Filter</p>
+
                 <div class="form-check">
                     <input class="form-check-input" type="checkbox" value="20" @change="checkFiltr" id="info">
                     <label class="form-check-label" for="flexCheckDefault">
@@ -65,10 +73,26 @@
                         Warning
                     </label>
                 </div>
+                <div style="margin-top: 10px;">
+                    <p class="filter_title">Logs time filter</p>
+                                    <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="today" @change="checkFiltr" id="today">
+                    <label class="form-check-label" for="flexCheckDefault">
+                        Today
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="yesterday" @change="checkFiltr" id="yesterday">
+                    <label class="form-check-label" for="flexCheckDefault">
+                        Yesterday
+                    </label>
+                </div>
+                </div>
                 <button type="button" class="btn btn-primary createUser" @click="filter">Apply filter</button>
             </div>
-            <h2>Logs Table</h2>
-            <table class="table table-bordered" id="datatable">
+            <div class="col-9">
+                <h2>Logs Table</h2>
+            <table class="table table-bordered" style="margin-bottom:100px" id="datatable">
                 <tbody>
                     <tr>
                         <th>ID</th>
@@ -84,6 +108,7 @@
                     </tr>
                 </tbody>
             </table>
+            </div>
         </div>
         <div class="container createUserTab hide">
             <div class="form-group">

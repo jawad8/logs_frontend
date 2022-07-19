@@ -37,7 +37,7 @@
   <div>
     <h1>Logs Display Mechanism </h1>
     <form class="loginForm">
-      <div class="imgcontainer">
+      <div class="imgcontainer" style="padding: 15px;">
         <img src="../assets/login.svg" alt="Avatar" class="avatar">
       </div>
       <div class="container loginCreds">
