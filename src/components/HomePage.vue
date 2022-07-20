@@ -1,7 +1,6 @@
 <style>
 .viewLogs {
     margin-left: 30%;
-
 }
 
 .buttonDiv {
@@ -23,22 +22,31 @@
 .form-check {
     width: 4px;
 }
+
 .logTable label{
     font-weight: 500;
+}
+.heading{
+    margin-top: -60px;
+    background-color: black;
 }
 .filter_title{
     font-weight: 700;
     text-align: left;
 }
+.bodyTab{
+    background-color: beige;
+}
 </style>
 <template>
-    <h1 class="display-2">Welcome to logs Display console</h1>
+<div class="heading">
+    <h1 class="display-2">Welcome to logs Display console</h1></div>
     <div class="buttonDiv">
         <button type="button" class="btn btn-primary createUser" @click="showUser">Create User</button>
         <button type="button" class="btn btn-primary viewLogs" @click="show">View Logs</button>
         <hr />
     </div>
-    <div>
+    <div class="bodyTab">
         <div class="logTable hide container row">
             <div class="col-3">
                 <p class="filter_title">Log Type Filter</p>
@@ -119,7 +127,7 @@
                 <label for="passwd">Password</label>
                 <input type="password" class="form-control" id="passwd" placeholder="Password">
             </div>
-            <button type="button" class="btn btn-primary">Create User</button>
+            <button type="button" class="btn btn-primary" @click="createUser">Create User</button>
         </div>
     </div>
 </template>
@@ -133,7 +141,6 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "datatables.net-dt/js/dataTables.dataTables";
 import "datatables.net-dt/css/jquery.dataTables.min.css";
 import $ from "jquery";
-
 const app = createApp(App)
 app.use(VueAxios, axios, $)
 export default {
@@ -180,6 +187,21 @@ export default {
             else {
                 x.target.classList.add("check")
             }
+        },
+        createUser() {
+            var create_userData = {
+                "Username": $("#Username").val(),
+                "password": $("#passwd").val(),
+                "user_type": "user"
+            }
+            axios.post("http://127.0.0.1:8000/users/createuser/", create_userData).then((response) => {
+                if (response.data) {
+                    alert("User created!")
+                }
+                else {
+                    alert("Something went wrong please try again")
+                }
+            });
         }
     }
 }

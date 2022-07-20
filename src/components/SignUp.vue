@@ -27,7 +27,10 @@
   color: #fff;
   cursor: pointer;
 }
-
+.signup_header{
+      margin-top: -60px;
+    background-color: black;
+}
 @import "https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css";
 @import"https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js";
 @import "https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js";
@@ -35,12 +38,13 @@
 
 <template>
   <div>
-    <h1>Logs Display Mechanism </h1>
+    <div class="signup_header">
+    <h1>Logs Display Mechanism </h1></div>
     <form class="loginForm">
       <div class="imgcontainer" style="padding: 15px;">
         <img src="../assets/login.svg" alt="Avatar" class="avatar">
       </div>
-      <div class="container loginCreds">
+      <div class="container loginCreds mb-3" style="background-color: beige">
         <label for="uname"><b>Username</b></label>
         <input type="text" placeholder="Enter Username" name="uname" class="username" required>
         <br />
