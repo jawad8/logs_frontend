@@ -52,31 +52,31 @@
                 <p class="filter_title">Log Type Filter</p>
 
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="20" @change="checkFiltr" id="info">
+                    <input class="form-check-input" type="checkbox" value="20" @change="checkFilter" id="info">
                     <label class="form-check-label" for="flexCheckDefault">
                         Info
                     </label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="40" @change="checkFiltr" id="error">
+                    <input class="form-check-input" type="checkbox" value="40" @change="checkFilter" id="error">
                     <label class="form-check-label" for="flexCheckDefault">
                         Error
                     </label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="10" @change="checkFiltr" id="debug">
+                    <input class="form-check-input" type="checkbox" value="10" @change="checkFilter" id="debug">
                     <label class="form-check-label" for="flexCheckDefault">
                         Debug
                     </label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="50" @change="checkFiltr" id="critical">
+                    <input class="form-check-input" type="checkbox" value="50" @change="checkFilter" id="critical">
                     <label class="form-check-label" for="flexCheckDefault">
                         Critical
                     </label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="30" @change="checkFiltr" id="warning">
+                    <input class="form-check-input" type="checkbox" value="30" @change="checkFilter" id="warning">
                     <label class="form-check-label" for="flexCheckDefault">
                         Warning
                     </label>
@@ -84,13 +84,13 @@
                 <div style="margin-top: 10px;">
                     <p class="filter_title">Logs time filter</p>
                                     <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="today" @change="checkFiltr" id="today">
+                    <input class="form-check-input" type="checkbox" value="today" @change="checkFilter" id="today">
                     <label class="form-check-label" for="flexCheckDefault">
                         Today
                     </label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="yesterday" @change="checkFiltr" id="yesterday">
+                    <input class="form-check-input" type="checkbox" value="yesterday" @change="checkFilter" id="yesterday">
                     <label class="form-check-label" for="flexCheckDefault">
                         Yesterday
                     </label>
@@ -145,9 +145,6 @@ const app = createApp(App)
 app.use(VueAxios, axios, $)
 export default {
     name: 'HomePage',
-    mounted() {
-
-    },
     data: function () {
         return {
             products: [],
@@ -173,7 +170,6 @@ export default {
             $('.form-check-input').map(function (val, x) {
                 if (x.classList.contains("check")) {
                     filterReq[x.id] = x.value
-
                 }
             });
             axios.post("http://127.0.0.1:8000/logs/filterLogs/", filterReq).then((response) => {
@@ -182,7 +178,7 @@ export default {
             });
         },
 
-        checkFiltr(x) {
+        checkFilter(x) {
             if (x.target.classList.contains("check")) {
                 x.target.classList.remove("check")
 
