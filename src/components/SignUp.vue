@@ -76,7 +76,7 @@ export default {
           this.$router.push({ name: 'HomePage' })
         }
         else{
-          alert("Please check username and password")
+          alert("Please enter correct username and password")
         }
       })
     }

@@ -94,7 +94,7 @@
                 <label for="passwd">Password</label>
                 <input type="password" class="form-control" id="passwd" placeholder="Password">
             </div>
-            <button type="button" class="btn btn-primary">Create User</button>
+            <button type="button" class="btn btn-primary" @click="createUser">Create User</button>
         </div>
     </div>
 </template>
@@ -130,10 +130,12 @@ export default {
                 $("#datatable").DataTable();
             });
         },
+
         showUser() {
             $(".createUserTab").removeClass("hide")
             $(".logTable").addClass("hide")
         },
+
         filter() {
             var filterReq = {}
             $('.form-check-input').map(function (val, x) {
@@ -147,6 +149,7 @@ export default {
                 $("#datatable").DataTable();
             });
         },
+
         checkFiltr(x) {
             if (x.target.classList.contains("check")) {
                 x.target.classList.remove("check")
@@ -154,6 +157,29 @@ export default {
             }
             else {
                 x.target.classList.add("check")
+            }
+        },
+        createUser(){
+            var username = $("#Username").val()
+            var passwd = $("#passwd").val()
+            if(username == "" || passwd == ""){
+                alert("Please enter all the fields!")
+            }
+            else{
+            var userData = {
+                'Username':username,
+                'password':passwd,
+                'user_type':'user'
+            }
+            axios.post('http://127.0.0.1:8000/users/createuser/', userData).then((response) => {
+                console.log(response)
+                if (response) {
+                    alert("User created successfully!")
+                }
+                else {
+                    alert("Please try again!")
+                }
+            });
             }
         }
     }
