@@ -1,7 +1,6 @@
 <style>
 .viewLogs {
     margin-left: 30%;
-
 }
 
 .buttonDiv {
@@ -23,18 +22,35 @@
 .form-check {
     width: 4px;
 }
+
+.logTable label{
+    font-weight: 500;
+}
+.heading{
+    margin-top: -60px;
+    background-color: black;
+}
+.filter_title{
+    font-weight: 700;
+    text-align: left;
+}
+.bodyTab{
+    background-color: beige;
+}
 </style>
 <template>
-    <h1 class="display-2">Welcome to logs Display console</h1>
+<div class="heading">
+    <h1 class="display-2">Welcome to logs Display console</h1></div>
     <div class="buttonDiv">
         <button type="button" class="btn btn-primary createUser" @click="showUser">Create User</button>
         <button type="button" class="btn btn-primary viewLogs" @click="show">View Logs</button>
         <hr />
     </div>
-    <div>
-        <div class="logTable hide container">
-            <div>
-                <label style="margin-left: -1075px;">Log Type Filter</label>
+    <div class="bodyTab">
+        <div class="logTable hide container row">
+            <div class="col-3">
+                <p class="filter_title">Log Type Filter</p>
+
                 <div class="form-check">
                     <input class="form-check-input" type="checkbox" value="20" @change="checkFiltr" id="info">
                     <label class="form-check-label" for="flexCheckDefault">
@@ -65,10 +81,26 @@
                         Warning
                     </label>
                 </div>
+                <div style="margin-top: 10px;">
+                    <p class="filter_title">Logs time filter</p>
+                                    <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="today" @change="checkFiltr" id="today">
+                    <label class="form-check-label" for="flexCheckDefault">
+                        Today
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="yesterday" @change="checkFiltr" id="yesterday">
+                    <label class="form-check-label" for="flexCheckDefault">
+                        Yesterday
+                    </label>
+                </div>
+                </div>
                 <button type="button" class="btn btn-primary createUser" @click="filter">Apply filter</button>
             </div>
-            <h2>Logs Table</h2>
-            <table class="table table-bordered" id="datatable">
+            <div class="col-9">
+                <h2>Logs Table</h2>
+            <table class="table table-bordered" style="margin-bottom:100px" id="datatable">
                 <tbody>
                     <tr>
                         <th>ID</th>
@@ -84,6 +116,7 @@
                     </tr>
                 </tbody>
             </table>
+            </div>
         </div>
         <div class="container createUserTab hide">
             <div class="form-group">
@@ -108,7 +141,6 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "datatables.net-dt/js/dataTables.dataTables";
 import "datatables.net-dt/css/jquery.dataTables.min.css";
 import $ from "jquery";
-
 const app = createApp(App)
 app.use(VueAxios, axios, $)
 export default {
@@ -159,28 +191,20 @@ export default {
                 x.target.classList.add("check")
             }
         },
-        createUser(){
-            var username = $("#Username").val()
-            var passwd = $("#passwd").val()
-            if(username == "" || passwd == ""){
-                alert("Please enter all the fields!")
+        createUser() {
+            var create_userData = {
+                "Username": $("#Username").val(),
+                "password": $("#passwd").val(),
+                "user_type": "user"
             }
-            else{
-            var userData = {
-                'Username':username,
-                'password':passwd,
-                'user_type':'user'
-            }
-            axios.post('http://127.0.0.1:8000/users/createuser/', userData).then((response) => {
-                console.log(response)
-                if (response) {
-                    alert("User created successfully!")
+            axios.post("http://127.0.0.1:8000/users/createuser/", create_userData).then((response) => {
+                if (response.data) {
+                    alert("User created!")
                 }
                 else {
-                    alert("Please try again!")
+                    alert("Something went wrong please try again")
                 }
             });
-            }
         }
     }
 }
