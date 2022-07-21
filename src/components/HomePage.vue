@@ -145,9 +145,6 @@ const app = createApp(App)
 app.use(VueAxios, axios, $)
 export default {
     name: 'HomePage',
-    mounted() {
-
-    },
     data: function () {
         return {
             products: [],
@@ -169,7 +166,6 @@ export default {
         checkFilter(x) {
             if (x.target.classList.contains("check")) {
                 x.target.classList.remove("check")
-
             }
             else {
                 x.target.classList.add("check")
@@ -180,7 +176,6 @@ export default {
             $('.form-check-input').map(function (val, x) {
                 if (x.classList.contains("check")) {
                     filterReq[x.id] = x.value
-
                 }
             });
             axios.post("http://127.0.0.1:8000/logs/filterLogs/", filterReq).then((response) => {
