@@ -42,8 +42,8 @@
 <div class="heading">
     <h1 class="display-2">Welcome to logs Display console</h1></div>
     <div class="buttonDiv">
-        <button type="button" class="btn btn-primary createUser" @click="showUser">Create User</button>
-        <button type="button" class="btn btn-primary viewLogs" @click="show">View Logs</button>
+        <button type="button" class="btn btn-primary createUser" @click="userToggle">Create User</button>
+        <button type="button" class="btn btn-primary viewLogs" @click="viewLogs">View Logs</button>
         <hr />
     </div>
     <div class="bodyTab">
@@ -52,31 +52,31 @@
                 <p class="filter_title">Log Type Filter</p>
 
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="20" @change="checkFiltr" id="info">
+                    <input class="form-check-input" type="checkbox" value="20" @change="checkFilter" id="info">
                     <label class="form-check-label" for="flexCheckDefault">
                         Info
                     </label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="40" @change="checkFiltr" id="error">
+                    <input class="form-check-input" type="checkbox" value="40" @change="checkFilter" id="error">
                     <label class="form-check-label" for="flexCheckDefault">
                         Error
                     </label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="10" @change="checkFiltr" id="debug">
+                    <input class="form-check-input" type="checkbox" value="10" @change="checkFilter" id="debug">
                     <label class="form-check-label" for="flexCheckDefault">
                         Debug
                     </label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="50" @change="checkFiltr" id="critical">
+                    <input class="form-check-input" type="checkbox" value="50" @change="checkFilter" id="critical">
                     <label class="form-check-label" for="flexCheckDefault">
                         Critical
                     </label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="30" @change="checkFiltr" id="warning">
+                    <input class="form-check-input" type="checkbox" value="30" @change="checkFilter" id="warning">
                     <label class="form-check-label" for="flexCheckDefault">
                         Warning
                     </label>
@@ -84,19 +84,19 @@
                 <div style="margin-top: 10px;">
                     <p class="filter_title">Logs time filter</p>
                                     <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="today" @change="checkFiltr" id="today">
+                    <input class="form-check-input" type="checkbox" value="today" @change="checkFilter" id="today">
                     <label class="form-check-label" for="flexCheckDefault">
                         Today
                     </label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="yesterday" @change="checkFiltr" id="yesterday">
+                    <input class="form-check-input" type="checkbox" value="yesterday" @change="checkFilter" id="yesterday">
                     <label class="form-check-label" for="flexCheckDefault">
                         Yesterday
                     </label>
                 </div>
                 </div>
-                <button type="button" class="btn btn-primary createUser" @click="filter">Apply filter</button>
+                <button type="button" class="btn btn-primary createUser" @click="applyFilter">Apply filter</button>
             </div>
             <div class="col-9">
                 <h2>Logs Table</h2>
@@ -124,8 +124,8 @@
                 <input type="text" class="form-control" id="Username" placeholder="User name">
             </div>
             <div class="form-group">
-                <label for="passwd">Password</label>
-                <input type="password" class="form-control" id="passwd" placeholder="Password">
+                <label for="password">Password</label>
+                <input type="password" class="form-control" id="password" placeholder="Password">
             </div>
             <button type="button" class="btn btn-primary" @click="createUser">Create User</button>
         </div>
@@ -154,7 +154,7 @@ export default {
         };
     },
     methods: {
-        show() {
+        viewLogs() {
             $(".logTable").removeClass("hide")
             $(".createUserTab").addClass("hide")
             axios.get("http://127.0.0.1:8000/logs/fetchLogs/").then((response) => {
@@ -162,11 +162,20 @@ export default {
                 $("#datatable").DataTable();
             });
         },
-        showUser() {
+        userToggle() {
             $(".createUserTab").removeClass("hide")
             $(".logTable").addClass("hide")
         },
-        filter() {
+        checkFilter(x) {
+            if (x.target.classList.contains("check")) {
+                x.target.classList.remove("check")
+
+            }
+            else {
+                x.target.classList.add("check")
+            }
+        },
+        applyFilter() {
             var filterReq = {}
             $('.form-check-input').map(function (val, x) {
                 if (x.classList.contains("check")) {
@@ -179,19 +188,10 @@ export default {
                 $("#datatable").DataTable();
             });
         },
-        checkFiltr(x) {
-            if (x.target.classList.contains("check")) {
-                x.target.classList.remove("check")
-
-            }
-            else {
-                x.target.classList.add("check")
-            }
-        },
         createUser() {
             var create_userData = {
                 "Username": $("#Username").val(),
-                "password": $("#passwd").val(),
+                "password": $("#password").val(),
                 "user_type": "user"
             }
             axios.post("http://127.0.0.1:8000/users/createuser/", create_userData).then((response) => {

@@ -46,12 +46,12 @@
       </div>
       <div class="container loginCreds mb-3" style="background-color: beige">
         <label for="uname"><b>Username</b></label>
-        <input type="text" placeholder="Enter Username" name="uname" class="username" required>
+        <input type="text" placeholder="Enter Username" name="username" class="username" required>
         <br />
         <label for="psw"><b>Password</b></label>
-        <input type="password" placeholder="Enter Password" name="psw" class="password" required>
+        <input type="password" placeholder="Enter Password" name="password" class="password" required>
         <br />
-        <button type="button" @click="greet">Sign in</button>
+        <button type="button" @click="login">Sign in</button>
       </div>
     </form>
   </div>
@@ -68,7 +68,7 @@ export default {
     }
   },
   methods: {
-    greet() {
+    login() {
       var username = $(".username").val()
       var password = $(".password").val()
       var authData = {
